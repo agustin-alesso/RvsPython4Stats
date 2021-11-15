@@ -1,4 +1,4 @@
-# Calentando motores
+# Calentando motores: estadístcas de resumen
 
 En esta parte vamos a trabajar con un set de datos pequeño correspondiente a estimaciones de rendimiento de soja (en tn/ha) de 25 lotes soja de una región. Los datos son:
 
@@ -294,7 +294,7 @@ results = {
 results
 ```
 
-Luego, el diccionaro se convierte en una estructura tipo `dataframe` usando el módulo `pandas`.
+Luego, el diccionaro se convierte en una estructura tipo `DataFrame` usando el módulo `pandas`.
 
 ```{python, eval = F}
 import pandas as pd

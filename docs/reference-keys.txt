@@ -1,7 +1,7 @@
 acerca-del-sitio
 motivación
 contenidos
-calentando-motores
+calentando-motores-estadístcas-de-resumen
 leer-los-datos
 r
 python

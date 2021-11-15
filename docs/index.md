@@ -1,5 +1,5 @@
 --- 
-title: "R vs Python"
+title: "Estadistica con R y Python"
 author: "Agusitn Alesso"
 site: bookdown::bookdown_site
 documentclass: book
