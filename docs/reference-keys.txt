@@ -1,0 +1,16 @@
+acerca-del-sitio
+motivación
+contenidos
+calentando-motores
+leer-los-datos
+r
+python
+the-sample-mean
+r-1
+python-1
+standard-deviation
+r-2
+python-2
+calculando-varias-estadísticas-a-la-vez
+r-3
+python-3

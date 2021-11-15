@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Capítulo 2 Calentando motores | R vs Python</title>
+<meta name="author" content="Agusitn Alesso">
+<meta name="description" content="En esta parte vamos a trabajar con un set de datos pequeño correspondiente a estimaciones de rendimiento de soja (en tn/ha) de 25 lotes soja de una región. Los datos son: 4.12, 4.61, 4, 5.46, 4.7,...">
+<meta name="generator" content="bookdown 0.24 with bs4_book()">
+<meta property="og:title" content="Capítulo 2 Calentando motores | R vs Python">
+<meta property="og:type" content="book">
+<meta property="og:description" content="En esta parte vamos a trabajar con un set de datos pequeño correspondiente a estimaciones de rendimiento de soja (en tn/ha) de 25 lotes soja de una región. Los datos son: 4.12, 4.61, 4, 5.46, 4.7,...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Capítulo 2 Calentando motores | R vs Python">
+<meta name="twitter:description" content="En esta parte vamos a trabajar con un set de datos pequeño correspondiente a estimaciones de rendimiento de soja (en tn/ha) de 25 lotes soja de una región. Los datos son: 4.12, 4.61, 4, 5.46, 4.7,...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.11/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="bs4_style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R vs Python</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Acerca del sitio</a></li>
+<li><a class="active" href="calentando-motores.html"><span class="header-section-number">2</span> Calentando motores</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="calentando-motores" class="section level1" number="2">
+<h1>
+<span class="header-section-number">Capítulo 2</span> Calentando motores<a class="anchor" aria-label="anchor" href="#calentando-motores"><i class="fas fa-link"></i></a>
+</h1>
+<p>En esta parte vamos a trabajar con un set de datos pequeño correspondiente a estimaciones de rendimiento de soja (en tn/ha) de 25 lotes soja de una región. Los datos son:</p>
+<pre><code>4.12, 4.61, 4, 5.46, 4.7, 4.01, 4.79, 4.94, 4.85, 4.32, 5.41, 4.73, 4.13, 3.17, 5.17, 4.47, 4.49, 5.07, 4.99, 4.86, 5.05, 4.97, 4.54, 3.31, 4.87</code></pre>
+<div id="leer-los-datos" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Leer los datos<a class="anchor" aria-label="anchor" href="#leer-los-datos"><i class="fas fa-link"></i></a>
+</h2>
+<p>El siguiente código muestra como cargar los datos de la muestra en un objeto llamado <code>yields</code>.</p>
+<div id="r" class="section level3" number="2.1.1">
+<h3>
+<span class="header-section-number">2.1.1</span> <strong>R</strong><a class="anchor" aria-label="anchor" href="#r"><i class="fas fa-link"></i></a>
+</h3>
+<p>La manera más simple de crearlo es usando la función <code><a href="https://rdrr.io/r/base/c.html">c()</a></code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">yields</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  <span class="fl">4.12</span>, <span class="fl">4.61</span>, <span class="fl">4</span>, <span class="fl">5.46</span>, <span class="fl">4.7</span>, <span class="fl">4.01</span>, <span class="fl">4.79</span>, <span class="fl">4.94</span>, <span class="fl">4.85</span>, <span class="fl">4.32</span>, <span class="fl">5.41</span>,
+  <span class="fl">4.73</span>, <span class="fl">4.13</span>, <span class="fl">3.17</span>, <span class="fl">5.17</span>, <span class="fl">4.47</span>, <span class="fl">4.49</span>, <span class="fl">5.07</span>, <span class="fl">4.99</span>, <span class="fl">4.86</span>, <span class="fl">5.05</span>,
+  <span class="fl">4.97</span>, <span class="fl">4.54</span>, <span class="fl">3.31</span>, <span class="fl">4.87</span>
+<span class="op">)</span>
+<span class="va">yields</span></code></pre></div>
+<pre><code> [1] 4.12 4.61 4.00 5.46 4.70 4.01 4.79 4.94 4.85 4.32 5.41
+[12] 4.73 4.13 3.17 5.17 4.47 4.49 5.07 4.99 4.86 5.05 4.97
+[23] 4.54 3.31 4.87</code></pre>
+</div>
+<div id="python" class="section level3" number="2.1.2">
+<h3>
+<span class="header-section-number">2.1.2</span> <strong>Python</strong><a class="anchor" aria-label="anchor" href="#python"><i class="fas fa-link"></i></a>
+</h3>
+<p>Crearemos un objeto tipo <code>list</code> usando <code>[ ]</code>. Tambien podemos crear un <code>tuple</code> que es simiar pero no mutable.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="calentando-motores.html#cb4-1" aria-hidden="true" tabindex="-1"></a>yields <span class="op">=</span> [</span>
+<span id="cb4-2"><a href="calentando-motores.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fl">4.12</span>, <span class="fl">4.61</span>, <span class="dv">4</span>, <span class="fl">5.46</span>, <span class="fl">4.7</span>, <span class="fl">4.01</span>, <span class="fl">4.79</span>, <span class="fl">4.94</span>, <span class="fl">4.85</span>, <span class="fl">4.32</span>, <span class="fl">5.41</span>,</span>
+<span id="cb4-3"><a href="calentando-motores.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fl">4.73</span>, <span class="fl">4.13</span>, <span class="fl">3.17</span>, <span class="fl">5.17</span>, <span class="fl">4.47</span>, <span class="fl">4.49</span>, <span class="fl">5.07</span>, <span class="fl">4.99</span>, <span class="fl">4.86</span>, <span class="fl">5.05</span>,</span>
+<span id="cb4-4"><a href="calentando-motores.html#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fl">4.97</span>, <span class="fl">4.54</span>, <span class="fl">3.31</span>, <span class="fl">4.87</span></span>
+<span id="cb4-5"><a href="calentando-motores.html#cb4-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-6"><a href="calentando-motores.html#cb4-6" aria-hidden="true" tabindex="-1"></a>yields</span></code></pre></div>
+<pre><code>[4.12, 4.61, 4, 5.46, 4.7, 4.01, 4.79, 4.94, 4.85, 4.32, 5.41, 4.73, 4.13, 3.17, 5.17, 4.47, 4.49, 5.07, 4.99, 4.86, 5.05, 4.97, 4.54, 3.31, 4.87]</code></pre>
+</div>
+</div>
+<div id="the-sample-mean" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> The sample mean<a class="anchor" aria-label="anchor" href="#the-sample-mean"><i class="fas fa-link"></i></a>
+</h2>
+<p>Para averiguar el rendimiento promedio de la muestra tenemos que aplicar la siguiente función:</p>
+<p><span class="math display">\[
+\bar{y} = \dfrac{\sum y_i}{n}
+\]</span></p>
+<p>A continuación vamos a calcularlo <em>a mano</em>, paso por paso, y creando una función. Finalmente lo haremos usando las funciones incluidas en ambos lenguajes.</p>
+<div id="r-1" class="section level3" number="2.2.1">
+<h3>
+<span class="header-section-number">2.2.1</span> <strong>R</strong><a class="anchor" aria-label="anchor" href="#r-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Calculando <em>a mano</em></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Total de observaciones</span>
+<span class="va">tot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>
+
+<span class="co"># Numero de elementos en la muestra</span>
+<span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>
+
+<span class="co"># Promedio</span>
+<span class="va">ybar</span> <span class="op">&lt;-</span> <span class="va">tot</span><span class="op">/</span><span class="va">n</span>
+<span class="va">ybar</span></code></pre></div>
+<pre><code>[1] 4.6012</code></pre>
+<p>Encapsulando todo en una función:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Definir la función `media`</span>
+<span class="va">media</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">tot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>
+  <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>
+  <span class="va">tot</span><span class="op">/</span><span class="va">n</span>
+<span class="op">}</span>
+
+<span class="co"># Aplicar función</span>
+<span class="fu">media</span><span class="op">(</span><span class="va">yields</span><span class="op">)</span></code></pre></div>
+<pre><code>[1] 4.6012</code></pre>
+<p>Lo mismo obtenemos usando la función <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span></code></pre></div>
+<pre><code>[1] 4.6012</code></pre>
+</div>
+<div id="python-1" class="section level3" number="2.2.2">
+<h3>
+<span class="header-section-number">2.2.2</span> <strong>Python</strong><a class="anchor" aria-label="anchor" href="#python-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Calculando <em>a mano</em></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="calentando-motores.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Total de observaciones</span></span>
+<span id="cb12-2"><a href="calentando-motores.html#cb12-2" aria-hidden="true" tabindex="-1"></a>tot <span class="op">=</span> <span class="bu">sum</span>(yields)</span>
+<span id="cb12-3"><a href="calentando-motores.html#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="calentando-motores.html#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Numero de elementos en la muestra</span></span>
+<span id="cb12-5"><a href="calentando-motores.html#cb12-5" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(yields)</span>
+<span id="cb12-6"><a href="calentando-motores.html#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="calentando-motores.html#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Promedio</span></span>
+<span id="cb12-8"><a href="calentando-motores.html#cb12-8" aria-hidden="true" tabindex="-1"></a>ybar <span class="op">=</span> tot<span class="op">/</span>n</span>
+<span id="cb12-9"><a href="calentando-motores.html#cb12-9" aria-hidden="true" tabindex="-1"></a>ybar</span></code></pre></div>
+<pre><code>4.6012</code></pre>
+<p>Encapsulando todo en una función:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="calentando-motores.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir la función `media`</span></span>
+<span id="cb14-2"><a href="calentando-motores.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> media(y):</span>
+<span id="cb14-3"><a href="calentando-motores.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  tot <span class="op">=</span> <span class="bu">sum</span>(y)</span>
+<span id="cb14-4"><a href="calentando-motores.html#cb14-4" aria-hidden="true" tabindex="-1"></a>  n <span class="op">=</span> <span class="bu">len</span>(y)</span>
+<span id="cb14-5"><a href="calentando-motores.html#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(tot<span class="op">/</span>n)</span>
+<span id="cb14-6"><a href="calentando-motores.html#cb14-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-7"><a href="calentando-motores.html#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="calentando-motores.html#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
+<span id="cb14-9"><a href="calentando-motores.html#cb14-9" aria-hidden="true" tabindex="-1"></a>media(yields)</span></code></pre></div>
+<pre><code>4.6012</code></pre>
+<p>Al contrario de <strong>R</strong> que ya incluye funciones estadísticas al inicio (paquete <code>stats</code>), en <strong>Python</strong> necesitamos importar modulos con <code>import</code>. Hay varias opciones: <code>statistics</code>, <code>numpy</code> y <code>scipy</code>. La más completa es el duo <code>numpy/scipy</code> que tiene funciones agrupadas en varios submodulos</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="calentando-motores.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar libreria numpy</span></span>
+<span id="cb16-2"><a href="calentando-motores.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb16-3"><a href="calentando-motores.html#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="calentando-motores.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular media</span></span>
+<span id="cb16-5"><a href="calentando-motores.html#cb16-5" aria-hidden="true" tabindex="-1"></a>np.mean(yields)</span></code></pre></div>
+<pre><code>4.6012</code></pre>
+</div>
+</div>
+<div id="standard-deviation" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> Standard deviation<a class="anchor" aria-label="anchor" href="#standard-deviation"><i class="fas fa-link"></i></a>
+</h2>
+<p>El desvió estándar de una muestra se define como:</p>
+<p><span class="math display">\[
+s = \sqrt{\dfrac{\sum (y_i - \bar{y})^2}{n-1}}
+\]</span></p>
+<p>A continuación se muestra como calcularlo <em>a mano</em> y usando funciones incluidas en ambos lenguajes. Aunque el calculo <em>a mano</em> se puede hacer en un solo paso, voy a mostrarlo por partes y creando una función.</p>
+<div id="r-2" class="section level3" number="2.3.1">
+<h3>
+<span class="header-section-number">2.3.1</span> <strong>R</strong><a class="anchor" aria-label="anchor" href="#r-2"><i class="fas fa-link"></i></a>
+</h3>
+<p>Calculando <em>a mano</em>. Algunos datos ya los tenemos de antes <code>ybar</code> y <code>n</code></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Total de desvios al cuadrado</span>
+<span class="va">tot_sq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">yields</span> <span class="op">-</span> <span class="va">ybar</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
+
+<span class="co"># Desvio</span>
+<span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">tot_sq</span><span class="op">/</span><span class="op">(</span><span class="va">n</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+<span class="va">s</span></code></pre></div>
+<pre><code>[1] 0.5698707</code></pre>
+<p>Poniendo todo en una funcion</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Definir funcion `desvio`</span>
+<span class="va">desvio</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>
+  <span class="va">ybar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">/</span><span class="va">n</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">y</span> <span class="op">-</span> <span class="va">ybar</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">n</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># Aplicar función </span>
+<span class="fu">desvio</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+<pre><code>[1] 0.3247527</code></pre>
+<p>Usando la función <code><a href="https://rdrr.io/r/stats/sd.html">sd()</a></code></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span></code></pre></div>
+<pre><code>[1] 0.5698707</code></pre>
+</div>
+<div id="python-2" class="section level3" number="2.3.2">
+<h3>
+<span class="header-section-number">2.3.2</span> <strong>Python</strong><a class="anchor" aria-label="anchor" href="#python-2"><i class="fas fa-link"></i></a>
+</h3>
+<p>Para calcular los desvios cuadráticos <em>a mano</em> se requiere aplicar la función resta y potencia de elemento a elemento. Por defecto las funciones no están verctorizadas por lo que tenemos que iterar sobre los elementos de <code>yield</code>. Una opción es usando <code>for/loop</code> o <code>list-comprehension</code>.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="calentando-motores.html#cb24-1" aria-hidden="true" tabindex="-1"></a>sq <span class="op">=</span> [(y <span class="op">-</span> ybar)<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> yields]</span>
+<span id="cb24-2"><a href="calentando-motores.html#cb24-2" aria-hidden="true" tabindex="-1"></a>tot_sq <span class="op">=</span> <span class="bu">sum</span>(sq)</span></code></pre></div>
+<p>El código anterior aplica la función <code>(y - ybar)**2</code> a cada elemento <code>y</code> contenido en <code>yield</code> y devuelve una nueva lista. Luego esa lista es usada para calcular el total.</p>
+<p>Como el cálculo del desvio requiere sacar la raiz cuadrada de la varianza, necesitamos importar la función <code><a href="https://rdrr.io/r/base/MathFun.html">sqrt()</a></code> del módulo <code>math</code></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="calentando-motores.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar sqrt</span></span>
+<span id="cb25-2"><a href="calentando-motores.html#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
+<span id="cb25-3"><a href="calentando-motores.html#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="calentando-motores.html#cb25-4" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> sqrt(tot_sq<span class="op">/</span>(n<span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb25-5"><a href="calentando-motores.html#cb25-5" aria-hidden="true" tabindex="-1"></a>s</span></code></pre></div>
+<pre><code>0.5698707455789134</code></pre>
+<p>Creando una función:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="calentando-motores.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definiendo al funcion `desvio`</span></span>
+<span id="cb27-2"><a href="calentando-motores.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> desvio(y):</span>
+<span id="cb27-3"><a href="calentando-motores.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="im">from</span> math <span class="im">import</span> sqrt</span>
+<span id="cb27-4"><a href="calentando-motores.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-5"><a href="calentando-motores.html#cb27-5" aria-hidden="true" tabindex="-1"></a>  n <span class="op">=</span> <span class="bu">len</span>(y)</span>
+<span id="cb27-6"><a href="calentando-motores.html#cb27-6" aria-hidden="true" tabindex="-1"></a>  ybar <span class="op">=</span> <span class="bu">sum</span>(y)<span class="op">/</span>n</span>
+<span id="cb27-7"><a href="calentando-motores.html#cb27-7" aria-hidden="true" tabindex="-1"></a>  sq <span class="op">=</span> [(y <span class="op">-</span> ybar)<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> y <span class="kw">in</span> yields]</span>
+<span id="cb27-8"><a href="calentando-motores.html#cb27-8" aria-hidden="true" tabindex="-1"></a>  tot_sq <span class="op">=</span> <span class="bu">sum</span>(sq)</span>
+<span id="cb27-9"><a href="calentando-motores.html#cb27-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-10"><a href="calentando-motores.html#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(sqrt(tot_sq<span class="op">/</span>(n<span class="op">-</span><span class="dv">1</span>)))</span>
+<span id="cb27-11"><a href="calentando-motores.html#cb27-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-12"><a href="calentando-motores.html#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="calentando-motores.html#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicando la funcion</span></span>
+<span id="cb27-14"><a href="calentando-motores.html#cb27-14" aria-hidden="true" tabindex="-1"></a>desvio(yields)</span></code></pre></div>
+<pre><code>0.5698707455789134</code></pre>
+<p>Usando la función <code>std</code> del paquete <code>numpy</code> que ya importamos antes.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="calentando-motores.html#cb29-1" aria-hidden="true" tabindex="-1"></a>np.std(yields)</span></code></pre></div>
+<pre><code>0.5583570184031001</code></pre>
+</div>
+</div>
+<div id="calculando-varias-estadísticas-a-la-vez" class="section level2" number="2.4">
+<h2>
+<span class="header-section-number">2.4</span> Calculando varias estadísticas a la vez<a class="anchor" aria-label="anchor" href="#calculando-varias-estad%C3%ADsticas-a-la-vez"><i class="fas fa-link"></i></a>
+</h2>
+<p>Supongamos que queremos averiguar las siguientes estadísitcas descriptivas a partir de los datos de la muestra y presentar los resultados en una tabla: <em>media</em>, <em>desvio</em>, <em>varianza</em>, <em>minimo</em>, <em>máximo</em>, <em>cuartiles</em>, <em>asimetría</em> y <em>kurtosis</em>.</p>
+<div id="r-3" class="section level3" number="2.4.1">
+<h3>
+<span class="header-section-number">2.4.1</span> <strong>R</strong><a class="anchor" aria-label="anchor" href="#r-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>La manera más simple es creando un <code>vector</code> que contenga los resultados. Algunas funciones necesarias se encuentran en el paquete <code>moments</code>.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>,
+  sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>,
+  var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>,
+  min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>,
+  Q1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">yields</span>, p <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span>,
+  median <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>,
+  Q3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">yields</span>, p <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>,
+  max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>,
+  skw <span class="op">=</span> <span class="fu">moments</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/moments/man/skewness.html">skewness</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>,
+  kurt <span class="op">=</span> <span class="fu">moments</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">results</span></code></pre></div>
+<pre><code>      mean         sd        var        min     Q1.25% 
+ 4.6012000  0.5698707  0.3247527  3.1700000  4.3200000 
+    median     Q3.75%        max        skw       kurt 
+ 4.7300000  4.9700000  5.4600000 -0.9192805  3.5280435 </code></pre>
+<p>Otra alternativa es poner los resultados en <code>data.frame</code></p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>    mean        sd       var  min Q1.25. median Q3.75.  max
+1 4.6012 0.5698707 0.3247527 3.17   4.32   4.73   4.97 5.46
+         skw     kurt
+1 -0.9192805 3.528043</code></pre>
+<p>Finalmente, usando <code>dplyr</code> podemos aplicar facilmente una lista de funciones a un conjunto de datos. Esto es extensible a un conjunto de datos con grupos.</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+
+<span class="va">funs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  mean <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>,
+  sd <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>,
+  var <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>,
+  min <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>,
+  Q1 <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">.x</span>, p <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span>,
+  median <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>,
+  Q3 <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">.x</span>, p <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>,
+  max <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>,
+  skw <span class="op">=</span> <span class="op">~</span> <span class="fu">moments</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/moments/man/skewness.html">skewness</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>,
+  kurt <span class="op">=</span> <span class="op">~</span> <span class="fu">moments</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/moments/man/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>
+<span class="op">)</span> 
+
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">yields</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span>.cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>, .fns <span class="op">=</span> <span class="va">funs</span>, .names <span class="op">=</span> <span class="st">"{.fn}"</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="va">results</span></code></pre></div>
+<pre><code>    mean        sd       var  min   Q1 median   Q3  max
+1 4.6012 0.5698707 0.3247527 3.17 4.32   4.73 4.97 5.46
+         skw     kurt
+1 -0.9192805 3.528043</code></pre>
+</div>
+<div id="python-3" class="section level3" number="2.4.2">
+<h3>
+<span class="header-section-number">2.4.2</span> <strong>Python</strong><a class="anchor" aria-label="anchor" href="#python-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>La mayoria de las funciones de la lista se incluyen en el módulo <code>numpy</code> pero otras deben ser cargadas desde <code>scipy</code>.</p>
+<p>Primero calculamos las estadísticas y las guardamos en un objetio <code>dict</code>.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="calentando-motores.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats <span class="im">as</span> sp</span>
+<span id="cb37-2"><a href="calentando-motores.html#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="calentando-motores.html#cb37-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> {</span>
+<span id="cb37-4"><a href="calentando-motores.html#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"mean"</span>: np.mean(yields),</span>
+<span id="cb37-5"><a href="calentando-motores.html#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sd"</span>: np.std(yields),</span>
+<span id="cb37-6"><a href="calentando-motores.html#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"var"</span>: np.var(yields),</span>
+<span id="cb37-7"><a href="calentando-motores.html#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"min"</span>: <span class="bu">min</span>(yields),</span>
+<span id="cb37-8"><a href="calentando-motores.html#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Q1"</span>: np.quantile(yields, <span class="fl">0.25</span>),</span>
+<span id="cb37-9"><a href="calentando-motores.html#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"median"</span>: np.median(yields),</span>
+<span id="cb37-10"><a href="calentando-motores.html#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Q3"</span>: np.quantile(yields, <span class="fl">0.75</span>),</span>
+<span id="cb37-11"><a href="calentando-motores.html#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"max"</span>: <span class="bu">max</span>(yields),</span>
+<span id="cb37-12"><a href="calentando-motores.html#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"skw"</span>: sp.stats.skew(yields),</span>
+<span id="cb37-13"><a href="calentando-motores.html#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kurt"</span>: sp.stats.kurtosis(yields)</span>
+<span id="cb37-14"><a href="calentando-motores.html#cb37-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-15"><a href="calentando-motores.html#cb37-15" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
+<pre><code>{'mean': 4.6012, 'sd': 0.5583570184031001, 'var': 0.31176255999999997, 'min': 3.17, 'Q1': 4.32, 'median': 4.73, 'Q3': 4.97, 'max': 5.46, 'skw': -0.9192805310042922, 'kurt': 0.5280434853525069}</code></pre>
+<p>Luego, el diccionaro se convierte en una estructura tipo <code>dataframe</code> usando el módulo <code>pandas</code>.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="calentando-motores.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb39-2"><a href="calentando-motores.html#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="calentando-motores.html#cb39-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame(results, index <span class="op">=</span> [<span class="dv">0</span>])</span>
+<span id="cb39-4"><a href="calentando-motores.html#cb39-4" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="index.html"><span class="header-section-number">1</span> Acerca del sitio</a></div>
+<div class="empty"></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#calentando-motores"><span class="header-section-number">2</span> Calentando motores</a></li>
+<li>
+<a class="nav-link" href="#leer-los-datos"><span class="header-section-number">2.1</span> Leer los datos</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#r"><span class="header-section-number">2.1.1</span> R</a></li>
+<li><a class="nav-link" href="#python"><span class="header-section-number">2.1.2</span> Python</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#the-sample-mean"><span class="header-section-number">2.2</span> The sample mean</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#r-1"><span class="header-section-number">2.2.1</span> R</a></li>
+<li><a class="nav-link" href="#python-1"><span class="header-section-number">2.2.2</span> Python</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#standard-deviation"><span class="header-section-number">2.3</span> Standard deviation</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#r-2"><span class="header-section-number">2.3.1</span> R</a></li>
+<li><a class="nav-link" href="#python-2"><span class="header-section-number">2.3.2</span> Python</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#calculando-varias-estad%C3%ADsticas-a-la-vez"><span class="header-section-number">2.4</span> Calculando varias estadísticas a la vez</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#r-3"><span class="header-section-number">2.4.1</span> R</a></li>
+<li><a class="nav-link" href="#python-3"><span class="header-section-number">2.4.2</span> Python</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R vs Python</strong>" was written by Agusitn Alesso. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
